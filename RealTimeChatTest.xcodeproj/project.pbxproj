@@ -109,13 +109,10 @@
 		FA19E55929BC1B9300185EBB /* RealTimeChat */ = {
 			isa = PBXGroup;
 			children = (
+				FA53E27729C507C20017B49E /* Wrappers */,
 				FA85632229BFD2D00074A6DF /* Models */,
-				FA19E58229BD015C00185EBB /* FirebaseStorageWrapper */,
-				FA19E58129BD015100185EBB /* FirestoreWrapper */,
-				FA19E58029BD014000185EBB /* CoreDataWrapper */,
 				FA19E56329BC1F0000185EBB /* Concrete */,
 				FA19E56229BC1EEC00185EBB /* Protocols */,
-				FA19E56029BC1ECE00185EBB /* Message.swift */,
 			);
 			path = RealTimeChat;
 			sourceTree = "<group>";
@@ -183,9 +180,20 @@
 			path = Publishers;
 			sourceTree = "<group>";
 		};
+		FA53E27729C507C20017B49E /* Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				FA19E58229BD015C00185EBB /* FirebaseStorageWrapper */,
+				FA19E58129BD015100185EBB /* FirestoreWrapper */,
+				FA19E58029BD014000185EBB /* CoreDataWrapper */,
+			);
+			path = Wrappers;
+			sourceTree = "<group>";
+		};
 		FA85632229BFD2D00074A6DF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FA19E56029BC1ECE00185EBB /* Message.swift */,
 				FA09DBEB29BFD537000BE3F8 /* MessageModel.xcdatamodeld */,
 			);
 			path = Models;

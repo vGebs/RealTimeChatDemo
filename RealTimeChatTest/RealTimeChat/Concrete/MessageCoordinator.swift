@@ -20,6 +20,14 @@ class MessageCoordinator: MessageCoordinatorProtocol {
         self.remote = remote
     }
     
+    func fetchMostRecentMessageForEachConversation(for currentUID: String) -> AnyPublisher<[String: Message], Error> {
+        return cache.fetchMostRecentMessageForEachConversation(for: currentUID)
+    }
+    
+    func fetchMostRecentMessageForConversation(with currentUID: String, and uid: String) -> AnyPublisher<Message?, Error> {
+        return cache.fetchMostRecentMessageForConversation(with: currentUID, and: uid)
+    }
+    
     func observeMessage(with docID: String) -> AnyPublisher<(Message, DocChangeType), Error> {
         return remote.observeMessage(with: docID)
             .flatMap { [weak self] (message, docChange) -> AnyPublisher<(Message, DocChangeType), Error> in
@@ -48,8 +56,8 @@ class MessageCoordinator: MessageCoordinatorProtocol {
     }
     
     //expirimental
-    func observeMessages(for currentUID: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
-        return remote.observeMessages(for: currentUID)
+    func observeMessages(for currentUID: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+        return remote.observeMessages(for: currentUID, newerThan: date)
             .flatMap { [weak self] messages -> AnyPublisher<[(Message, DocChangeType)], Error> in
                 for msg in messages {
                     switch msg.1 {
@@ -77,8 +85,8 @@ class MessageCoordinator: MessageCoordinatorProtocol {
             }.eraseToAnyPublisher()
     }
     
-    func observeMessagesToMe(forCurrent uid: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
-        return remote.observeMessagesToMe(forCurrent: uid)
+    func observeMessagesToMe(forCurrent uid: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+        return remote.observeMessagesToMe(forCurrent: uid, newerThan: date)
             .flatMap { [weak self] messages -> AnyPublisher<[(Message, DocChangeType)], Error> in
                 for msg in messages {
                     switch msg.1 {
@@ -106,8 +114,8 @@ class MessageCoordinator: MessageCoordinatorProtocol {
             }.eraseToAnyPublisher()
     }
     
-    func observeMessagesFromMe(forCurrent uid: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
-        return remote.observeMessagesFromMe(forCurrent: uid)
+    func observeMessagesFromMe(forCurrent uid: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+        return remote.observeMessagesFromMe(forCurrent: uid, newerThan: date)
             .flatMap { [weak self] messages -> AnyPublisher<[(Message, DocChangeType)], Error> in
                 for msg in messages {
                     switch msg.1 {

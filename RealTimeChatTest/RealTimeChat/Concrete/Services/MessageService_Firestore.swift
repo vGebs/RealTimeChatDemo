@@ -24,23 +24,25 @@ class MessageService_Firestore: MessengerRemote {
     }
     
     //expirimental
-    func observeMessages(for currentUID: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
-        return Publishers.Zip(self.observeMessagesToMe(forCurrent: currentUID),
-                              self.observeMessagesFromMe(forCurrent: currentUID))
+    func observeMessages(for currentUID: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+        return Publishers.Zip(self.observeMessagesToMe(forCurrent: currentUID, newerThan: date),
+                              self.observeMessagesFromMe(forCurrent: currentUID, newerThan: date))
         .map { return $0 + $1 }
         .eraseToAnyPublisher()
     }
     
-    func observeMessagesToMe(forCurrent uid: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+    func observeMessagesToMe(forCurrent uid: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
         let query: Query = db.collection(collection)
             .whereField("toID", isEqualTo: uid)
+            .whereField("timestamp", isGreaterThan: date)
         
         return observeHelper(query)
     }
     
-    func observeMessagesFromMe(forCurrent uid: String) -> AnyPublisher<[(Message, DocChangeType)], Error> {
+    func observeMessagesFromMe(forCurrent uid: String, newerThan date: Date) -> AnyPublisher<[(Message, DocChangeType)], Error> {
         let query: Query = db.collection(collection)
             .whereField("fromID", isEqualTo: uid)
+            .whereField("timestamp", isGreaterThan: date)
         
         return observeHelper(query)
     }
